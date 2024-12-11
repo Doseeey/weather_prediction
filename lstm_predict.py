@@ -67,41 +67,6 @@ def make_prediction_lstm(criteria, time_span, debug_mode):
     # Filtrowanie zakresu
     df_filtered = df[(df['date'] > train_end_date) & (df['date'] <= prediction_end_date)]
 
-    # Wizualizacja wyników
-    plt.figure(figsize=(12, 6))
-    if debug_mode:
-        plt.plot(df['date'], df['temp_pow'], label='Faktyczna temperatura', color='blue', linestyle='--')
-        plt.plot(df['date'], df['temp_pow_pred'], label='Przewidywana temperatura (LSTM)', color='red', linestyle='-')
-    else:
-        plt.plot(df_filtered['date'], df_filtered['temp_pow_pred'], color='red', label='Prognoza LSTM')
-    if debug_mode:
-        plt.axvline(x=train_end_date, color='green', linestyle='--', label='Koniec danych treningowych')
-    plt.xlabel('Data')
-    plt.ylabel('Temperatura')
-    plt.legend()
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
-
-    # Debugowanie - różnice i metryki
-    if debug_mode:
-        y_pred_test = model.predict(X_test_lstm).flatten()
-        mse = mean_squared_error(y_test, y_pred_test)
-        r2 = r2_score(y_test, y_pred_test)
-        print("Test MSE:", mse)
-        print("Test R^2 Score:", r2)
-
-        plt.figure(figsize=(12, 6))
-        plt.plot(df['date'], df['temp_pow'] - df['temp_pow_pred'], label='Różnica temperatur', color='purple')
-        plt.axvline(x=train_end_date, color='green', linestyle='--', label='Koniec danych treningowych')
-        plt.xlabel('Data')
-        plt.ylabel('Różnica temperatur')
-        plt.title('Różnica temperatur (Faktyczna - Przewidywana)')
-        plt.legend()
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.show()
-
     # Zwracanie przewidywanych wartości
     return df_filtered['temp_pow_pred']
 
